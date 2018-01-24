@@ -1,13 +1,11 @@
 $(function() {
-
-
-
   // The taskHtml method takes in JavaScript representation
   // of the task and produces an HTML representation using
   // <li> tags
   function taskHtml(task) {
     var checkedStatus = task.done ? "checked" : "";
-    var liElement = '<li><div class="view"><input class="toggle" type="checkbox"' +
+    var liClass = task.done ? "completed" : "";
+    var liElement = '<li id="listItem-' + task.id + '" class="' + liClass + '">' + '<div class="view"><input class="toggle" type="checkbox"' +
     " data-id='" + task.id + "'" +
     checkedStatus +
     '><label>' +
@@ -31,6 +29,11 @@ $(function() {
       task: {
         done: doneValue
       }
+    }).success(function(data) {
+      var liHtml = taskHtml(data);
+      var $li = $("#listItem-" + data.id)
+      $li.replaceWith(liHtml);
+      $('.toggle').change(toggleTask);
     });
   }
 
